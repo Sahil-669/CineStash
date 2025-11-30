@@ -17,7 +17,7 @@ data class Movie(
     @SerialName("vote_average")
     val rating: Double,
 
-    val overView: String
+    val overview: String
 ) {
     val posterUrl: String
         get() = "https://image.tmdb.org/t/p/w500$posterPath"
