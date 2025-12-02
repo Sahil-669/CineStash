@@ -7,6 +7,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.example.cinestash.data.MovieService
 import org.example.cinestash.ui.HomeViewModel
+import org.example.cinestash.ui.SearchViewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
@@ -24,6 +25,7 @@ val appModule = module {
     }
     single { MovieService(get()) }
     viewModel { HomeViewModel(get()) }
+    viewModel { SearchViewModel(get()) }
 }
 
 fun initKoin() {

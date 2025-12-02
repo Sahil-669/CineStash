@@ -41,7 +41,4 @@ class HomeViewModel (
             }
         }
     }
-    fun searchMovies(query: String) {
-
-    }
 }
