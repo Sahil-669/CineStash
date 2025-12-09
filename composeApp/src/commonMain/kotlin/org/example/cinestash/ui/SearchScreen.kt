@@ -1,5 +1,6 @@
 package org.example.cinestash.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -30,7 +31,7 @@ import org.koin.core.annotation.KoinExperimentalAPI
 
 @OptIn(ExperimentalMaterial3Api::class, KoinExperimentalAPI::class)
 @Composable
-fun SearchScreen() {
+fun SearchScreen(onMovieClick: (Int) -> Unit) {
 
     val viewModel = koinViewModel<SearchViewModel>()
     val state by viewModel.state.collectAsState()
@@ -78,7 +79,8 @@ fun SearchScreen() {
                     items(state.movies) { movie ->
                         MovieCard(
                             title = movie.title,
-                            imageUrl = movie.posterUrl
+                            imageUrl = movie.posterUrl,
+                            modifier = Modifier.clickable { onMovieClick(movie.id) }
                         )
                     }
                 }

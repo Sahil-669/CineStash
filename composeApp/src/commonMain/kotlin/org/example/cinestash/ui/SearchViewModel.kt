@@ -7,10 +7,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.example.cinestash.data.MovieService
+import org.example.cinestash.data.repository.MovieRepository
 
 class SearchViewModel (
-    private val movieService: MovieService
+    private val repository: MovieRepository
 ): ViewModel() {
 
     private val _state = MutableStateFlow(SearchState())
@@ -27,10 +27,10 @@ class SearchViewModel (
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, errorMessage = null) }
             try {
-                val response = movieService.searchMovies(currentQuery)
+                val response = repository.searchMovies(currentQuery)
                 _state.update { it.copy(
                     isLoading = false,
-                    movies = response.results
+                    movies = response
                 ) }
             } catch (e: Exception) {
                 _state.update { it.copy(

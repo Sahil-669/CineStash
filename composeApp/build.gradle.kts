@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.room)
+    alias(libs.plugins.ksp)
 }
 
 kotlin {
@@ -56,6 +58,8 @@ kotlin {
             implementation(libs.coil.network.ktor)
             implementation(compose.materialIconsExtended)
             implementation(libs.jetbrains.navigation.compose)
+            implementation(libs.room.runtime)
+            implementation(libs.sqlite.bundled)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -98,9 +102,20 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
+dependencies {
+    ksp(libs.room.compiler)
+}
+room {
+    schemaDirectory("$projectDir/schemas")
+}
 
 dependencies {
     debugImplementation(compose.uiTooling)
+    add("kspCommonMainMetadata", libs.room.compiler)
+    add("kspAndroid", libs.room.compiler)
+    add("kspIosArm64", libs.room.compiler)
+    add("kspIosSimulatorArm64", libs.room.compiler)
+    add("kspJvm", libs.room.compiler)
 }
 
 compose.desktop {

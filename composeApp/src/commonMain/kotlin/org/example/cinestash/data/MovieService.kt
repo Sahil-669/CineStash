@@ -4,6 +4,8 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import org.example.cinestash.data.model.Credits
+import org.example.cinestash.data.model.Movie
 import org.example.cinestash.data.model.MoviesResponse
 
 class MovieService(private val client: HttpClient) {
@@ -11,9 +13,10 @@ class MovieService(private val client: HttpClient) {
 
     private val apiKey = "f9cd5644d05e9a41bd627842861390c9"
 
-    suspend fun getPopularMovies(): MoviesResponse {
+    suspend fun getPopularMovies(page: Int = 1): MoviesResponse {
         return client.get("$baseUrl/movie/popular") {
             parameter("api_key", apiKey)
+            parameter("page", page)
         }.body()
     }
 
@@ -23,5 +26,17 @@ class MovieService(private val client: HttpClient) {
             parameter("query", query)
         }.body()
     }
+
+    suspend fun getMovieDetails(movieId: Int): Movie {
+        return client.get("$baseUrl/movie/$movieId") {
+            parameter("api_key", apiKey)
+        }.body()
+    }
+
+    suspend fun getMovieCredits(movieId: Int): Credits =
+        client.get("$baseUrl/movie/$movieId/credits") {
+            parameter("api_key", apiKey)
+        }.body()
+
 }
 

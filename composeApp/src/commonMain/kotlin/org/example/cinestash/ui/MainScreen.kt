@@ -1,5 +1,7 @@
 package org.example.cinestash.ui
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -20,6 +22,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import org.example.cinestash.ui.navigation.Detail
 import org.example.cinestash.ui.navigation.Home
 import org.example.cinestash.ui.navigation.Profile
 import org.example.cinestash.ui.navigation.Search
@@ -82,15 +86,60 @@ fun MainScreen() {
         NavHost(
             navController = navController,
             startDestination = Home,
-            modifier = Modifier.padding(innerPadding)
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(300)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(300)
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(300)
+                )
+            },
+            popExitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(300)
+                )
+            },
+            modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())
         ) {
             composable<Home> {
-                HomeScreen()
+                HomeScreen(
+                    onMovieClick = { movieId ->
+                        navController.navigate(Detail(movieId))
+                    }
+                )
             }
             composable<Search> {
-                SearchScreen()
+                SearchScreen(
+                    onMovieClick = { movieId ->
+                        navController.navigate(Detail(movieId))
+                    }
+                )
             }
-            composable<Profile> { Text("soon") }
+            composable<Profile> {
+                StashScreen (
+                    onMovieClick = {movieId ->
+                        navController.navigate(Detail(movieId))
+                    }
+                )
+            }
+            composable<Detail> { backStackEntry ->
+                val detail: Detail = backStackEntry.toRoute()
+                DetailScreen(
+                    movieId = detail.movieId,
+                    onBackClick = {navController.popBackStack()}
+                )
+            }
         }
     }
 }
