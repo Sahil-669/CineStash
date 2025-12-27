@@ -11,7 +11,7 @@ import org.example.cinestash.data.model.MoviesResponse
 class MovieService(private val client: HttpClient) {
     private val baseUrl = "https://api.themoviedb.org/3"
 
-    private val apiKey = "f9cd5644d05e9a41bd627842861390c9"
+    private val apiKey = "your_api_key"
 
     suspend fun getPopularMovies(page: Int = 1): MoviesResponse {
         return client.get("$baseUrl/movie/popular") {
